@@ -1,0 +1,31 @@
+{
+  "sat": {
+    "slot1": {
+      "haveData": true,
+      "isMul": true,
+      "period1": {
+        "courseShortForm": "CSE3101",
+        "Instructor": ["Sen", "Ali"]
+      },
+      "period2": {
+        "courseShortForm": "CSE3103",
+        "Instructor": ["SA", "HsN"]
+      },
+      "period3": {
+        "courseShortForm": "CSE3105",
+        "Instructor": ["FP"]
+      }
+    },
+    "slot2": {
+      "haveData": true,
+      "isMul": false,
+      "period": {
+        "courseShortForm": "CSE3102",
+        "Instructor": ["Sen", "Ali"]
+      }
+    },
+    "slot3": {
+      "haveData": false
+    }
+  }
+}
