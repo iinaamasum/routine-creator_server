@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
 const periodSchema = new mongoose.Schema({
+  have: Boolean,
   courseShortForm: String,
-  Instructor: Array,
+  instructor1: String,
+  instructor2: String,
 });
 
 const slot = new mongoose.Schema({
@@ -21,6 +23,10 @@ const daySchema = new mongoose.Schema({
 
 const routineSchema = new mongoose.Schema(
   {
+    course_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'NewClassModel',
+    },
     user_email: String,
     series: String,
     section: String,
