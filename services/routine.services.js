@@ -30,7 +30,7 @@ exports.deleteRoutineByIdService = async (classId) => {
   return result;
 };
 
-exports.patchClassByIdService = async (classId, updateDoc) => {
+exports.patchRoutineByIdService = async (classId, updateDoc) => {
   const isExistRoutine = await this.getRoutineByIdService(classId);
   if (!isExistRoutine?._id) {
     return {
@@ -45,3 +45,22 @@ exports.patchClassByIdService = async (classId, updateDoc) => {
   );
   return result;
 };
+
+// exports.patchSubRoutineByIdService = async (classId, updateDoc) => {
+//   console.log(classId);
+//   const day = await RoutineModel.daySchema.findById(classId);
+//   console.log(day);
+//   const isExistRoutine = true;
+//   if (!isExistRoutine?._id) {
+//     return {
+//       modifiedCount: 0,
+//       message: 'routine not found with the id. nothing to update.',
+//     };
+//   }
+//   const result = await RoutineModel.daySchema.slot.updateOne(
+//     { _id: classId },
+//     { $set: updateDoc },
+//     { runValidators: true }
+//   );
+//   return result;
+// };

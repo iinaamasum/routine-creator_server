@@ -6,7 +6,31 @@ const {
   deleteRoutineByIdService,
   getRoutineByIdService,
   patchRoutineByIdService,
+  patchSubRoutineByIdService,
 } = require('../services/routine.services');
+
+// exports.postNewSubRoutine = async(req, res) => {
+//   try {
+//     const result = await postNewSubRoutineService(req.body);
+//     if (!result) {
+//       return res.status(400).json({
+//         status: 'failed',
+//         message: "Can't Post the given class.",
+//         result,
+//       });
+//     }
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'Posted the given new class.',
+//       result,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       status: 'failed',
+//       message: "Can't post the data. Something went wrong",
+//       error,
+//     });
+// }
 
 exports.postNewRoutine = async (req, res) => {
   try {
@@ -34,6 +58,8 @@ exports.postNewRoutine = async (req, res) => {
 
 exports.getAllRoutine = async (req, res) => {
   try {
+    const data = req.body;
+    console.log(data);
     const result = await getAllRoutineService(req.query);
     if (result.length === 0) {
       return res.status(400).json({
@@ -128,4 +154,48 @@ exports.patchRoutineById = async (req, res) => {
       error,
     });
   }
+};
+
+exports.patchSubRoutineById = async (req, res) => {
+  const { routineId, dayId, slotId } = req.params;
+  const routineMonId = ObjectId(routineId);
+  const dayMonId = ObjectId(dayId);
+  const slotMonId = ObjectId(slotId);
+  const newSlotData = req.body;
+
+  RoutineModel.findById(routineMonId, async (err, routine) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error finding routine' });
+    }
+
+    let day;
+    if (routine.sat._id.equals(dayMonId)) day = 'sat';
+    if (routine.sun._id.equals(dayMonId)) day = 'sun';
+    if (routine.mon._id.equals(dayMonId)) day = 'mon';
+    if (routine.tues._id.equals(dayMonId)) day = 'tues';
+    if (routine.wed._id.equals(dayMonId)) day = 'wed';
+
+    const dayData = routine[day];
+    let slot;
+    if (dayData.slot1._id.equals(slotMonId)) slot = 'slot1';
+    if (dayData.slot2._id.equals(slotMonId)) slot = 'slot2';
+    if (dayData.slot3._id.equals(slotMonId)) slot = 'slot3';
+    const slotData = dayData[slot];
+    dayData[slot] = newSlotData;
+    routine[day] = dayData;
+
+    const result = await patchRoutineByIdService(routineId, routine);
+    if (result.modifiedCount === 0) {
+      res.status(400).json({
+        status: 'Failed',
+        result,
+      });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        message: 'Class is updated with the given data. @param object.',
+        result: routine,
+      });
+    }
+  });
 };

@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const periodSchema = new mongoose.Schema({
   have: Boolean,
   courseShortForm: String,
+  // credit: String,
   instructor1: String,
   instructor2: String,
+  roomNumber: String,
 });
 
 const slot = new mongoose.Schema({
