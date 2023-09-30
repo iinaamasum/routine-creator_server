@@ -32,6 +32,7 @@ const routineSchema = new mongoose.Schema(
     user_email: String,
     series: String,
     section: String,
+    semester: String,
     sat: daySchema,
     sun: daySchema,
     mon: daySchema,

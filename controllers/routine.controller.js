@@ -64,7 +64,7 @@ exports.getAllRoutine = async (req, res) => {
     if (result.length === 0) {
       return res.status(400).json({
         status: 'failed',
-        message: "Can't get all class.",
+        message: 'You have no routine created previously',
         result,
       });
     }
