@@ -1,4 +1,4 @@
-const NewClassModel = require('../models/newClass.model');
+const { NewClassModel } = require('../models/newClass.model');
 
 exports.postNewClassService = async (data) => {
   const postDoc = new NewClassModel(data);

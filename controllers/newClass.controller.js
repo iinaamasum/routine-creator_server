@@ -1,5 +1,4 @@
 const { ObjectId } = require('mongodb');
-const NewClassModel = require('../models/newClass.model');
 const {
   postNewClassService,
   getAllClassService,
@@ -7,6 +6,7 @@ const {
   getClassByIdService,
   patchClassByIdService,
 } = require('../services/newClass.service');
+const { NewClassModel, CourseModel } = require('../models/newClass.model');
 
 exports.postNewClass = async (req, res) => {
   try {
@@ -106,25 +106,39 @@ exports.deleteClassById = async (req, res) => {
 
 exports.patchClassById = async (req, res) => {
   try {
-    const mongoObjectId = ObjectId(req.params.id);
-    const result = await patchClassByIdService(mongoObjectId, req.body);
-    if (!result.modifiedCount) {
-      return res.status(400).json({
-        status: 'failed',
-        message: "Can't update the class.",
+    const class_id = ObjectId(req.params.id);
+    const course = await NewClassModel.findById(class_id);
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    console.log(req.body);
+    const postDoc = new CourseModel(req.body);
+    const addedCourse = await postDoc.save();
+    const courseKey = Date.now().toString();
+
+    course.courses.set(courseKey, addedCourse);
+    const result = await NewClassModel.updateOne(
+      { _id: class_id },
+      { $set: course },
+      { runValidators: true }
+    );
+
+    if (result.modifiedCount === 0) {
+      res.status(400).json({
+        status: 'Failed',
         result,
       });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        message: 'Class is updated with the given data. @param object.',
+        result: course,
+      });
     }
-    res.status(200).json({
-      status: 'success',
-      message: 'Class is updated with the given data. @param object.',
-      result,
-    });
   } catch (error) {
-    res.status(400).json({
-      status: 'failed',
-      message: "Can't update the class. Something went wrong.",
-      error,
-    });
+    return res
+      .status(500)
+      .json({ message: 'Internal server error', error: error.message });
   }
 };

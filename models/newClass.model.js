@@ -7,6 +7,8 @@ const courseSchema = new mongoose.Schema({
   instructor2: String,
 });
 
+const CourseModel = mongoose.model('CourseModel', courseSchema);
+
 const newClassSchema = new mongoose.Schema(
   {
     user_email: String,
@@ -24,4 +26,4 @@ const newClassSchema = new mongoose.Schema(
 );
 
 const NewClassModel = mongoose.model('NewClassModel', newClassSchema);
-module.exports = NewClassModel;
+module.exports = { NewClassModel, CourseModel };
